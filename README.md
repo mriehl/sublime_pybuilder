@@ -3,6 +3,8 @@ EasyPyb
 
 Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 
+![EasyPyb provides PyBuilder integration for Sublime Text 3](easypyb.gif)
+
 ## Installation
 Clone it in your sublime text `Packages/` directory.
 
