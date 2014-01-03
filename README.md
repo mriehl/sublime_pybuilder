@@ -14,7 +14,7 @@ Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 Clone it in your sublime text `Packages/` directory.
 
 ## Usage
-The command "EasyPyb : Run PyBuilder" will be made available to you through the command palette. Activating it will run PyBuilder on your project.
+The command `EasyPyb : Run PyBuilder` will be made available to you through the command palette. Activating it will run PyBuilder on your project.
 
 ## Configuration
 EasyPyb expects two project settings to be present:
