@@ -104,16 +104,17 @@ def plugin_unloaded():
 
 
 def determine_pyb_executable_path(view):
-    pyb_path = view.settings().get('pyb_path')
-    if pyb_path:
-        return pyb_path
-    return infer_pyb_executable_path_from_interpreter(view)
-
-
-def infer_pyb_executable_path_from_interpreter(view):
     interpreter = view.settings().get('python_interpreter')
     if not interpreter:
         raise ExecutionError('No configured python_interpreter')
+
+    pyb_path = view.settings().get('pyb_path')
+    if pyb_path:
+        return pyb_path
+    return infer_pyb_executable_path_from_interpreter(view, interpreter)
+
+
+def infer_pyb_executable_path_from_interpreter(view, interpreter):
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
     if not os.path.exists(pyb_script):
