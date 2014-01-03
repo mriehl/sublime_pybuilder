@@ -111,10 +111,10 @@ def determine_pyb_executable_command(view):
     pyb_path = view.settings().get('pyb_path')
     if pyb_path:
         return [interpreter, pyb_path]
-    return infer_pyb_executable_command_from_interpreter(view, interpreter)
+    return infer_pyb_executable_command_from_interpreter(interpreter)
 
 
-def infer_pyb_executable_command_from_interpreter(view, interpreter):
+def infer_pyb_executable_command_from_interpreter(interpreter):
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
     if not os.path.exists(pyb_script):
