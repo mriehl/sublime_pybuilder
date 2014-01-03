@@ -103,18 +103,18 @@ def plugin_unloaded():
     pass
 
 
-def determine_pyb_executable_path(view):
+def determine_pyb_executable_command(view):
     interpreter = view.settings().get('python_interpreter')
     if not interpreter:
         raise ExecutionError('No configured python_interpreter')
 
     pyb_path = view.settings().get('pyb_path')
     if pyb_path:
-        return pyb_path
-    return infer_pyb_executable_path_from_interpreter(view, interpreter)
+        return [interpreter, pyb_path]
+    return infer_pyb_executable_command_from_interpreter(view, interpreter)
 
 
-def infer_pyb_executable_path_from_interpreter(view, interpreter):
+def infer_pyb_executable_command_from_interpreter(view, interpreter):
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
     if not os.path.exists(pyb_script):
@@ -122,7 +122,7 @@ def infer_pyb_executable_path_from_interpreter(view, interpreter):
             pyb_script)
         raise ExecutionError(error_message)
 
-    return pyb_script
+    return [pyb_script]
 
 
 def run_pybuilder():
@@ -133,11 +133,11 @@ def run_pybuilder():
     if not project_root:
         raise ExecutionError('No configured project_root')
 
-    pyb_script = determine_pyb_executable_path(view)
+    pyb_script = determine_pyb_executable_command(view)
 
     scratch('Build started...', new_panel=True, newline=True)
 
-    defer_with_progress([pyb_script], cwd=project_root)
+    defer_with_progress(pyb_script, cwd=project_root)
 
 
 def scratch(text, new_panel=False, newline=False):
