@@ -115,7 +115,7 @@ def run_pybuilder():
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
     if not os.path.exists(pyb_script):
-        error_message = 'Cannot find pybuilder at {0}, perhaps it is not installed?'.format(
+        error_message = 'Cannot find PyBuilder at {0}, perhaps it is not installed?'.format(
             pyb_script)
         raise ExecutionError(error_message)
     scratch('Build started...', new_panel=True, newline=True)
