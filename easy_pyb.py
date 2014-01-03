@@ -40,7 +40,15 @@ if sys.version_info < (3, 3):
 
 
 class ExecutionError(BaseException):
-    pass
+
+    def __str__(self):
+        message = super(ExecutionError, self).__str__()
+        return '''
+An error has occurred while trying to run PyBuilder!
+
+
+{0}
+'''.format(message)
 
 
 def defer_with_progress(args, cwd=None):
