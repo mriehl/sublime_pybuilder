@@ -33,6 +33,7 @@ import sublime_plugin
 
 global panel  # ugly - but view.get_output_panel recreates the output panel
               # each time it is called, which sucks
+panel = None
 
 if sys.version_info < (3, 3):
     raise RuntimeError('EasyPyb is only compatible with Sublime Text 3')
@@ -84,9 +85,7 @@ def read_async(fd):
 
 
 def plugin_loaded():
-    global panel
-    window = sublime.active_window()
-    panel = window.get_output_panel("easypyb")
+    pass
 
 
 def plugin_unloaded():
@@ -106,12 +105,16 @@ def run_pybuilder():
         return
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
-    scratch('Build started...\n')
+    scratch('Build started...\n', new_panel=True)
 
     defer_with_progress([pyb_script], cwd=project_root)
 
 
-def scratch(text):
+def scratch(text, new_panel=False):
+    global panel
+    if new_panel:
+        window = sublime.active_window()
+        panel = window.get_output_panel("easypyb")
     sublime.active_window().run_command('scratch_text', {'text': text})
 
 
