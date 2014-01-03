@@ -125,7 +125,7 @@ def scratch(text, new_panel=False):
 class EasyPybRun(sublime_plugin.ApplicationCommand):
 
     def run(self):
-        sublime.set_timeout(run_pybuilder, 0)
+        run_pybuilder()
 
 
 class ScratchText(sublime_plugin.TextCommand):
