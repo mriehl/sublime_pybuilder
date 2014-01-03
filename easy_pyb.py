@@ -118,16 +118,18 @@ def run_pybuilder():
         error_message = 'Cannot find pybuilder at {0}, perhaps it is not installed?'.format(
             pyb_script)
         raise ExecutionError(error_message)
-    scratch('Build started...\n', new_panel=True)
+    scratch('Build started...', new_panel=True, newline=True)
 
     defer_with_progress([pyb_script], cwd=project_root)
 
 
-def scratch(text, new_panel=False):
+def scratch(text, new_panel=False, newline=False):
     global panel
     if new_panel:
         window = sublime.active_window()
         panel = window.get_output_panel("easypyb")
+    if newline:
+        text += '\n'
     sublime.active_window().run_command('scratch_text', {'text': text})
 
 
