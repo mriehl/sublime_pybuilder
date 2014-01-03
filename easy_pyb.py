@@ -130,7 +130,8 @@ class ScratchText(sublime_plugin.TextCommand):
         window = sublime.active_window()
         panel.insert(edit, panel.size(), text)
         panel.show(panel.size())
-        if not panel.id() == window.active_view().id():
+        panel_active = panel.id() == window.active_view().id()
+        if not panel_active:
             window.run_command("show_panel", {"panel": "output.easypyb"})
 
 
