@@ -90,10 +90,9 @@ def read_async(fd):
     try:
         return fd.read()
     except IOError as e:
-        if e.errno != errno.EAGAIN:
-            raise e
-        else:
+        if e.errno == errno.EAGAIN:
             return ''
+        raise e
 
 
 def plugin_loaded():
