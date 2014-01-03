@@ -32,13 +32,13 @@ Here's what your project settings might look like :
     [
         {
             "follow_symlinks": true,
-            "path": "/data/home/mriehl/workspace/yadt-docker-clusterenv/yadtshell"
+            "path": "/home/mriehl/workspace/yadtshell"
         }
     ],
     "settings":
     {
-        "python_interpreter": "/data/home/mriehl/workspace/yadt-docker-clusterenv/yadtshell/venv/bin/python",
-        "project_root": "/data/home/mriehl/workspace/yadt-docker-clusterenv/yadtshell"
+        "python_interpreter": "/home/mriehl/workspace/yadtshell/venv/bin/python",
+        "project_root": "/home/mriehl/workspace/yadtshell"
     }
 }
 ```
