@@ -39,6 +39,10 @@ if sys.version_info < (3, 3):
     raise RuntimeError('EasyPyb is only compatible with Sublime Text 3')
 
 
+class ExecutionError(BaseException):
+    pass
+
+
 def defer_with_progress(args, cwd=None):
     thread = threading.Thread(
         target=spawn_command_with_realtime_output, args=(args, cwd))
@@ -97,18 +101,16 @@ def run_pybuilder():
     view = window.active_view()
     interpreter = view.settings().get('python_interpreter')
     if not interpreter:
-        sublime.error_message('No configured python_interpreter')
-        return
+        raise ExecutionError('No configured python_interpreter')
     project_root = view.settings().get('project_root')
     if not project_root:
-        sublime.error_message('No configured project_root')
-        return
+        raise ExecutionError('No configured project_root')
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
     if not os.path.exists(pyb_script):
-        sublime.error_message(
-            'Cannot find pybuilder at {0}, perhaps it is not installed?'.format(pyb_script))
-        return
+        error_message = 'Cannot find pybuilder at {0}, perhaps it is not installed?'.format(
+            pyb_script)
+        raise ExecutionError(error_message)
     scratch('Build started...\n', new_panel=True)
 
     defer_with_progress([pyb_script], cwd=project_root)
@@ -125,7 +127,10 @@ def scratch(text, new_panel=False):
 class EasyPybRun(sublime_plugin.ApplicationCommand):
 
     def run(self):
-        run_pybuilder()
+        try:
+            run_pybuilder()
+        except ExecutionError as error:
+            sublime.error_message(str(error))
 
 
 class ScratchText(sublime_plugin.TextCommand):
