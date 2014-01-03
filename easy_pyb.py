@@ -103,21 +103,30 @@ def plugin_unloaded():
     pass
 
 
-def run_pybuilder():
-    window = sublime.active_window()
-    view = window.active_view()
+def determine_pyb_executable_path(view):
     interpreter = view.settings().get('python_interpreter')
     if not interpreter:
         raise ExecutionError('No configured python_interpreter')
-    project_root = view.settings().get('project_root')
-    if not project_root:
-        raise ExecutionError('No configured project_root')
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
     if not os.path.exists(pyb_script):
         error_message = 'Cannot find PyBuilder at {0}, perhaps it is not installed?'.format(
             pyb_script)
         raise ExecutionError(error_message)
+
+    return pyb_script
+
+
+def run_pybuilder():
+    window = sublime.active_window()
+    view = window.active_view()
+
+    project_root = view.settings().get('project_root')
+    if not project_root:
+        raise ExecutionError('No configured project_root')
+
+    pyb_script = determine_pyb_executable_path(view)
+
     scratch('Build started...', new_panel=True, newline=True)
 
     defer_with_progress([pyb_script], cwd=project_root)
