@@ -104,7 +104,10 @@ def plugin_unloaded():
 
 
 def determine_pyb_executable_path(view):
-    return infer_pyb_executable_path_from_interpreter
+    pyb_path = view.settings().get('pyb_path')
+    if pyb_path:
+        return pyb_path
+    return infer_pyb_executable_path_from_interpreter(view)
 
 
 def infer_pyb_executable_path_from_interpreter(view):
