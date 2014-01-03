@@ -43,5 +43,30 @@ Here's what your project settings might look like :
 }
 ```
 
+### Special case
+In order to build pybuilder, you need to run a bootstrapping script.
+This script must be run with the right python interpreter in order to see your packages.
+Thus we need to specify the path to the bootstrapping script additionally.
+
+My settings are:
+
+```
+{
+    "folders":
+    [
+        {
+            "follow_symlinks": true,
+            "path": "/home/mriehl/workspace/pybuilder"
+        }
+    ],
+    "settings":
+    {
+        "python_interpreter": "/home/mriehl/workspace/pybuilder/venv/bin/python",
+        "pyb_path": "/home/mriehl/workspace/pybuilder/bootstrap",
+        "project_root": "/home/mriehl/workspace/pybuilder"
+    }
+}
+```
+
 ## License
 [MIT](https://github.com/mriehl/EasyPyb/blob/master/LICENSE)
