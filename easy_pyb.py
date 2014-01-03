@@ -105,6 +105,10 @@ def run_pybuilder():
         return
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
+    if not os.path.exists(pyb_script):
+        sublime.error_message(
+            'Cannot find pybuilder at {0}, perhaps it is not installed?'.format(pyb_script))
+        return
     scratch('Build started...\n', new_panel=True)
 
     defer_with_progress([pyb_script], cwd=project_root)
