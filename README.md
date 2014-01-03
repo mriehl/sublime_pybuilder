@@ -5,6 +5,11 @@ Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 
 ![EasyPyb provides PyBuilder integration for Sublime Text 3](easypyb.gif)
 
+## Features
+* Real-time output
+* Minimal configuration if you use Anaconda or SublimePythonIDE as it reuses the settings
+* Does not block so you can work or check out what to do next while building.
+
 ## Installation
 Clone it in your sublime text `Packages/` directory.
 
