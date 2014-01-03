@@ -1,0 +1,6 @@
+[
+    {
+        "caption": "EasyPyb : Run",
+        "command": "easy_pyb_run",
+    }
+]

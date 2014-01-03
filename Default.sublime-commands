@@ -1,0 +1,13 @@
+[
+    {
+        "caption": "EasyPyb: Run PyBuilder",
+        "command": "easy_pyb_run"
+    },
+    {
+        "caption": "scratch_text",
+        "command": "scratch_text",
+        "args": {
+            "text": ""
+        }
+    }
+]
