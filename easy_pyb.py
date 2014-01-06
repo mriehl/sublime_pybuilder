@@ -182,6 +182,16 @@ def spawn_command_with_realtime_output(args, cwd):
             return
 
 
+def scratch(text, new_panel=False, newline=False):
+    global panel
+    if new_panel:
+        window = sublime.active_window()
+        panel = window.get_output_panel("easypyb")
+    if newline:
+        text += '\n'
+    sublime.active_window().run_command('scratch_text', {'text': text})
+
+
 def flag_fd_as_async(fd):
     fcntl.fcntl(fd, fcntl.F_SETFL, fcntl.fcntl(
         fd, fcntl.F_GETFL) | os.O_NONBLOCK)
@@ -205,16 +215,6 @@ def plugin_loaded():
 
 def plugin_unloaded():
     pass
-
-
-def scratch(text, new_panel=False, newline=False):
-    global panel
-    if new_panel:
-        window = sublime.active_window()
-        panel = window.get_output_panel("easypyb")
-    if newline:
-        text += '\n'
-    sublime.active_window().run_command('scratch_text', {'text': text})
 
 
 def pyb_init():
