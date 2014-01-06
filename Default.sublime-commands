@@ -16,6 +16,14 @@
         "command": "easy_pyb_verify"
     },
     {
+        "caption": "EasyPyb: Install dependencies",
+        "command": "easy_pyb_install_dependencies"
+    },
+    {
+        "caption": "EasyPyb: Publish",
+        "command": "easy_pyb_publish"
+    },
+    {
         "caption": "scratch_text",
         "command": "scratch_text",
         "args": {

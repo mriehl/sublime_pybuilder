@@ -182,6 +182,18 @@ class EasyPybVerify(sublime_plugin.ApplicationCommand):
         run_pybuilder_and_catch_errors(['verify'])
 
 
+class EasyPybInstallDependencies(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['install_dependencies'])
+
+
+class EasyPybPublish(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['publish'])
+
+
 class ScratchText(sublime_plugin.TextCommand):
 
     def run(self, edit, text):
