@@ -35,9 +35,6 @@ global panel  # ugly - but view.get_output_panel recreates the output panel
               # each time it is called, which sucks
 panel = None
 
-if sys.version_info < (3, 3):
-    raise RuntimeError('EasyPyb is only compatible with Sublime Text 3')
-
 
 class ExecutionError(BaseException):
 
@@ -96,7 +93,10 @@ def read_async(fd):
 
 
 def plugin_loaded():
-    pass
+    if sys.version_info < (3, 3):
+        error = 'EasyPyb is only compatible with Sublime Text 3'
+        sublime.error_message(error)
+        raise RuntimeError(error)
 
 
 def plugin_unloaded():
