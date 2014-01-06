@@ -36,6 +36,59 @@ global panel  # ugly - but view.get_output_panel recreates the output panel
 panel = None
 
 
+class EasyPybRun(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors([])
+
+
+class EasyPybRunUnitTests(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['run_unit_tests'])
+
+
+class EasyPybAnalyze(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['analyze'])
+
+
+class EasyPybVerify(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['verify'])
+
+
+class EasyPybInstallDependencies(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['install_dependencies'])
+
+
+class EasyPybPublish(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['publish'])
+
+
+class EasyPybInit(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        pyb_init()
+
+
+class ScratchText(sublime_plugin.TextCommand):
+
+    def run(self, edit, text):
+        window = sublime.active_window()
+        panel.insert(edit, panel.size(), text)
+        panel.show(panel.size())
+        panel_active = panel.id() == window.active_view().id()
+        if not panel_active:
+            window.run_command("show_panel", {"panel": "output.easypyb"})
+
+
 class ExecutionError(BaseException):
 
     def __str__(self):
@@ -160,59 +213,6 @@ def run_pybuilder_and_catch_errors(pyb_args):
 
 def pyb_init():
     pass
-
-
-class EasyPybRun(sublime_plugin.ApplicationCommand):
-
-    def run(self):
-        run_pybuilder_and_catch_errors([])
-
-
-class EasyPybRunUnitTests(sublime_plugin.ApplicationCommand):
-
-    def run(self):
-        run_pybuilder_and_catch_errors(['run_unit_tests'])
-
-
-class EasyPybAnalyze(sublime_plugin.ApplicationCommand):
-
-    def run(self):
-        run_pybuilder_and_catch_errors(['analyze'])
-
-
-class EasyPybVerify(sublime_plugin.ApplicationCommand):
-
-    def run(self):
-        run_pybuilder_and_catch_errors(['verify'])
-
-
-class EasyPybInstallDependencies(sublime_plugin.ApplicationCommand):
-
-    def run(self):
-        run_pybuilder_and_catch_errors(['install_dependencies'])
-
-
-class EasyPybPublish(sublime_plugin.ApplicationCommand):
-
-    def run(self):
-        run_pybuilder_and_catch_errors(['publish'])
-
-
-class EasyPybInit(sublime_plugin.ApplicationCommand):
-
-    def run(self):
-        pyb_init()
-
-
-class ScratchText(sublime_plugin.TextCommand):
-
-    def run(self, edit, text):
-        window = sublime.active_window()
-        panel.insert(edit, panel.size(), text)
-        panel.show(panel.size())
-        panel_active = panel.id() == window.active_view().id()
-        if not panel_active:
-            window.run_command("show_panel", {"panel": "output.easypyb"})
 
 
 class ThreadProgress():
