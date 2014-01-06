@@ -117,9 +117,7 @@ def run_pybuilder_and_catch_errors(pyb_args):
 def run_pybuilder(pyb_args):
     project_root = get_project_root()
 
-    window = sublime.active_window()
-    view = window.active_view()
-    pyb_script = determine_pyb_executable_command(view)
+    pyb_script = determine_pyb_executable_command()
     pyb_script.extend(pyb_args)
 
     scratch('Build started...', new_panel=True, newline=True)
@@ -127,7 +125,7 @@ def run_pybuilder(pyb_args):
     defer_with_progress(pyb_script, cwd=project_root)
 
 
-def determine_pyb_executable_command(view):
+def determine_pyb_executable_command():
     interpreter = get_setting('python_interpreter')
 
     pyb_path = get_setting('pyb_path', mandatory=False)
