@@ -9,6 +9,7 @@ Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 * Real-time output
 * Minimal configuration if you use Anaconda or SublimePythonIDE as it reuses the settings
 * Does not block so you can work or check out what to do next while building.
+* [pyb-init](https://github.com/mriehl/pyb_init) support built-in
 
 ## Installation
 Clone it in your sublime text `Packages/` directory.
