@@ -43,7 +43,7 @@ Here's what your project settings might look like :
 }
 ```
 
-### Special case
+### Special case - only if you want to work on the PyBuilder project itself!
 In order to build pybuilder, you need to run a bootstrapping script.
 This script must be run with the right python interpreter in order to see your packages.
 Thus we need to specify the path to the bootstrapping script additionally.
