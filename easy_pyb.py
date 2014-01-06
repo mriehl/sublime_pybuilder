@@ -158,6 +158,10 @@ def run_pybuilder_and_catch_errors(pyb_args):
             sublime.error_message(str(error))
 
 
+def pyb_init():
+    pass
+
+
 class EasyPybRun(sublime_plugin.ApplicationCommand):
 
     def run(self):
@@ -192,6 +196,12 @@ class EasyPybPublish(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors(['publish'])
+
+
+class EasyPybInit(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        pyb_init()
 
 
 class ScratchText(sublime_plugin.TextCommand):

@@ -24,6 +24,10 @@
         "command": "easy_pyb_publish"
     },
     {
+        "caption": "EasyPyb: Pyb init",
+        "command": "easy_pyb_init"
+    },
+    {
         "caption": "scratch_text",
         "command": "scratch_text",
         "args": {
