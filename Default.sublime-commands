@@ -4,6 +4,18 @@
         "command": "easy_pyb_run"
     },
     {
+        "caption": "EasyPyb: Run unit tests",
+        "command": "easy_pyb_run_unit_tests"
+    },
+    {
+        "caption": "EasyPyb: Analyze",
+        "command": "easy_pyb_analyze"
+    },
+    {
+        "caption": "EasyPyb: Verify",
+        "command": "easy_pyb_verify"
+    },
+    {
         "caption": "scratch_text",
         "command": "scratch_text",
         "args": {

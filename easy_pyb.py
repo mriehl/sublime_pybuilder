@@ -151,13 +151,35 @@ def scratch(text, new_panel=False, newline=False):
     sublime.active_window().run_command('scratch_text', {'text': text})
 
 
+def run_pybuilder_and_catch_errors(pyb_args):
+        try:
+            run_pybuilder(pyb_args)
+        except ExecutionError as error:
+            sublime.error_message(str(error))
+
+
 class EasyPybRun(sublime_plugin.ApplicationCommand):
 
     def run(self):
-        try:
-            run_pybuilder([])
-        except ExecutionError as error:
-            sublime.error_message(str(error))
+        run_pybuilder_and_catch_errors([])
+
+
+class EasyPybRunUnitTests(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['run_unit_tests'])
+
+
+class EasyPybAnalyze(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['analyze'])
+
+
+class EasyPybVerify(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['verify'])
 
 
 class ScratchText(sublime_plugin.TextCommand):
