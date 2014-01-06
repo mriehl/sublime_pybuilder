@@ -18,7 +18,9 @@ Several commands will be made available to you through the command palette.
 You can use them to :
 
 * Run PyBuilder (implies default tasks)
+* Clean your project
 * Run unit tests
+* Run integration tests
 * Analyze (lint, etc.) your project
 * Publish your project
 * Verify your project

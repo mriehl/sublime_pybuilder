@@ -54,10 +54,22 @@ class EasyPybRun(sublime_plugin.ApplicationCommand):
         run_pybuilder_and_catch_errors([])
 
 
+class EasyPybClean(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['clean'])
+
+
 class EasyPybRunUnitTests(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors(['run_unit_tests'])
+
+
+class EasyPybRunIntegrationTests(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        run_pybuilder_and_catch_errors(['run_integration_tests'])
 
 
 class EasyPybAnalyze(sublime_plugin.ApplicationCommand):
