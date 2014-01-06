@@ -125,7 +125,7 @@ def infer_pyb_executable_command_from_interpreter(view, interpreter):
     return [pyb_script]
 
 
-def run_pybuilder():
+def run_pybuilder(pyb_args):
     window = sublime.active_window()
     view = window.active_view()
 
@@ -134,6 +134,7 @@ def run_pybuilder():
         raise ExecutionError('No configured project_root')
 
     pyb_script = determine_pyb_executable_command(view)
+    pyb_script.extend(pyb_args)
 
     scratch('Build started...', new_panel=True, newline=True)
 
@@ -154,7 +155,7 @@ class EasyPybRun(sublime_plugin.ApplicationCommand):
 
     def run(self):
         try:
-            run_pybuilder()
+            run_pybuilder([])
         except ExecutionError as error:
             sublime.error_message(str(error))
 
