@@ -152,16 +152,16 @@ def infer_pyb_executable_command_from_interpreter(view, interpreter):
     return [pyb_script]
 
 
-def defer_with_progress(args, cwd=None):
+def defer_with_progress(args, cwd=None, shell=False):
     thread = threading.Thread(
-        target=spawn_command_with_realtime_output, args=(args, cwd))
+        target=spawn_command_with_realtime_output, args=(args, cwd, shell))
     thread.start()
     ThreadProgress(thread, 'PyBuilder running', 'PyBuilder finished')
 
 
-def spawn_command_with_realtime_output(args, cwd):
+def spawn_command_with_realtime_output(args, cwd, shell):
     child = subprocess.Popen(
-        args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=shell)
     flag_fd_as_async(child.stdout)
     flag_fd_as_async(child.stderr)
 
@@ -218,7 +218,16 @@ def plugin_unloaded():
 
 
 def pyb_init():
-    pass
+    window = sublime.active_window()
+    view = window.active_view()
+
+    project_root = view.settings().get('project_root')
+    if not project_root:
+        raise ExecutionError('No configured project_root')
+
+    scratch('Pyb init started...', new_panel=True, newline=True)
+
+    defer_with_progress(['pyb-init local'], cwd=project_root, shell=True)
 
 
 class ThreadProgress():
