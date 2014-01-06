@@ -36,6 +36,18 @@ global panel  # ugly - but view.get_output_panel recreates the output panel
 panel = None
 
 
+class ExecutionError(BaseException):
+
+    def __str__(self):
+        message = super(ExecutionError, self).__str__()
+        return '''
+An error has occurred while trying to run PyBuilder!
+
+
+{0}
+'''.format(message)
+
+
 class EasyPybRun(sublime_plugin.ApplicationCommand):
 
     def run(self):
@@ -79,6 +91,12 @@ class EasyPybInit(sublime_plugin.ApplicationCommand):
 
 
 class ScratchText(sublime_plugin.TextCommand):
+    """
+    Helper command to deploy text to the easypyb output panel.
+    Also gives focus to the panel if it's not focused yet.
+    The panel needs to be a global because get_output_panel'ing it recreates
+    it and discards the existing text.
+    """
 
     def run(self, edit, text):
         window = sublime.active_window()
@@ -89,16 +107,20 @@ class ScratchText(sublime_plugin.TextCommand):
             window.run_command("show_panel", {"panel": "output.easypyb"})
 
 
-class ExecutionError(BaseException):
+def run_pybuilder(pyb_args):
+    window = sublime.active_window()
+    view = window.active_view()
 
-    def __str__(self):
-        message = super(ExecutionError, self).__str__()
-        return '''
-An error has occurred while trying to run PyBuilder!
+    project_root = view.settings().get('project_root')
+    if not project_root:
+        raise ExecutionError('No configured project_root')
 
+    pyb_script = determine_pyb_executable_command(view)
+    pyb_script.extend(pyb_args)
 
-{0}
-'''.format(message)
+    scratch('Build started...', new_panel=True, newline=True)
+
+    defer_with_progress(pyb_script, cwd=project_root)
 
 
 def defer_with_progress(args, cwd=None):
@@ -176,22 +198,6 @@ def infer_pyb_executable_command_from_interpreter(view, interpreter):
         raise ExecutionError(error_message)
 
     return [pyb_script]
-
-
-def run_pybuilder(pyb_args):
-    window = sublime.active_window()
-    view = window.active_view()
-
-    project_root = view.settings().get('project_root')
-    if not project_root:
-        raise ExecutionError('No configured project_root')
-
-    pyb_script = determine_pyb_executable_command(view)
-    pyb_script.extend(pyb_args)
-
-    scratch('Build started...', new_panel=True, newline=True)
-
-    defer_with_progress(pyb_script, cwd=project_root)
 
 
 def scratch(text, new_panel=False, newline=False):
