@@ -24,7 +24,6 @@ You can use them to :
 * Analyze (lint, etc.) your project
 * Publish your project
 * Verify your project
-* Install dependencies for your project
 * Run [pyb-init](https://github.com/mriehl/pyb_init) on your project
 
 ## Configuration
