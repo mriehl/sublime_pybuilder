@@ -107,6 +107,13 @@ class ScratchText(sublime_plugin.TextCommand):
             window.run_command("show_panel", {"panel": "output.easypyb"})
 
 
+def run_pybuilder_and_catch_errors(pyb_args):
+        try:
+            run_pybuilder(pyb_args)
+        except ExecutionError as error:
+            sublime.error_message(str(error))
+
+
 def run_pybuilder(pyb_args):
     window = sublime.active_window()
     view = window.active_view()
@@ -121,6 +128,28 @@ def run_pybuilder(pyb_args):
     scratch('Build started...', new_panel=True, newline=True)
 
     defer_with_progress(pyb_script, cwd=project_root)
+
+
+def determine_pyb_executable_command(view):
+    interpreter = view.settings().get('python_interpreter')
+    if not interpreter:
+        raise ExecutionError('No configured python_interpreter')
+
+    pyb_path = view.settings().get('pyb_path')
+    if pyb_path:
+        return [interpreter, pyb_path]
+    return infer_pyb_executable_command_from_interpreter(view, interpreter)
+
+
+def infer_pyb_executable_command_from_interpreter(view, interpreter):
+    bin_dir = os.path.dirname(interpreter)
+    pyb_script = os.path.join(bin_dir, 'pyb')
+    if not os.path.exists(pyb_script):
+        error_message = 'Cannot find PyBuilder at {0}, perhaps it is not installed?'.format(
+            pyb_script)
+        raise ExecutionError(error_message)
+
+    return [pyb_script]
 
 
 def defer_with_progress(args, cwd=None):
@@ -178,28 +207,6 @@ def plugin_unloaded():
     pass
 
 
-def determine_pyb_executable_command(view):
-    interpreter = view.settings().get('python_interpreter')
-    if not interpreter:
-        raise ExecutionError('No configured python_interpreter')
-
-    pyb_path = view.settings().get('pyb_path')
-    if pyb_path:
-        return [interpreter, pyb_path]
-    return infer_pyb_executable_command_from_interpreter(view, interpreter)
-
-
-def infer_pyb_executable_command_from_interpreter(view, interpreter):
-    bin_dir = os.path.dirname(interpreter)
-    pyb_script = os.path.join(bin_dir, 'pyb')
-    if not os.path.exists(pyb_script):
-        error_message = 'Cannot find PyBuilder at {0}, perhaps it is not installed?'.format(
-            pyb_script)
-        raise ExecutionError(error_message)
-
-    return [pyb_script]
-
-
 def scratch(text, new_panel=False, newline=False):
     global panel
     if new_panel:
@@ -208,13 +215,6 @@ def scratch(text, new_panel=False, newline=False):
     if newline:
         text += '\n'
     sublime.active_window().run_command('scratch_text', {'text': text})
-
-
-def run_pybuilder_and_catch_errors(pyb_args):
-        try:
-            run_pybuilder(pyb_args)
-        except ExecutionError as error:
-            sublime.error_message(str(error))
 
 
 def pyb_init():
