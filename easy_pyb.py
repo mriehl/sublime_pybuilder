@@ -128,9 +128,7 @@ def run_pybuilder(pyb_args):
 
 
 def determine_pyb_executable_command(view):
-    interpreter = view.settings().get('python_interpreter')
-    if not interpreter:
-        raise ExecutionError('No configured python_interpreter')
+    interpreter = get_setting('python_interpreter')
 
     pyb_path = view.settings().get('pyb_path')
     if pyb_path:
@@ -222,15 +220,18 @@ def pyb_init():
     defer_with_progress(['pyb-init local'], cwd=project_root, shell=True)
 
 
-def get_project_root():
+def get_setting(name):
     window = sublime.active_window()
     view = window.active_view()
 
-    project_root = view.settings().get('project_root')
-    if not project_root:
-        raise ExecutionError('No configured project_root')
+    setting = view.settings().get(name)
+    if not setting:
+        raise ExecutionError('Cannot find setting {0}'.format(name))
+    return setting
 
-    return project_root
+
+def get_project_root():
+    return get_setting('project_root')
 
 
 class ThreadProgress():
