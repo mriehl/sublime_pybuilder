@@ -156,7 +156,7 @@ def defer_with_progress(args, cwd=None, shell=False):
     thread = threading.Thread(
         target=spawn_command_with_realtime_output, args=(args, cwd, shell))
     thread.start()
-    ThreadProgress(thread, 'PyBuilder running', 'PyBuilder finished')
+    ThreadProgress(thread, 'EasyPyb running', 'EasyPyb finished!')
 
 
 def spawn_command_with_realtime_output(args, cwd, shell):
