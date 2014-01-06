@@ -130,13 +130,13 @@ def run_pybuilder(pyb_args):
 def determine_pyb_executable_command(view):
     interpreter = get_setting('python_interpreter')
 
-    pyb_path = view.settings().get('pyb_path')
+    pyb_path = get_setting('pyb_path', mandatory=False)
     if pyb_path:
         return [interpreter, pyb_path]
-    return infer_pyb_executable_command_from_interpreter(view, interpreter)
+    return infer_pyb_executable_command_from_interpreter(interpreter)
 
 
-def infer_pyb_executable_command_from_interpreter(view, interpreter):
+def infer_pyb_executable_command_from_interpreter(interpreter):
     bin_dir = os.path.dirname(interpreter)
     pyb_script = os.path.join(bin_dir, 'pyb')
     if not os.path.exists(pyb_script):
@@ -220,12 +220,12 @@ def pyb_init():
     defer_with_progress(['pyb-init local'], cwd=project_root, shell=True)
 
 
-def get_setting(name):
+def get_setting(name, mandatory=True):
     window = sublime.active_window()
     view = window.active_view()
 
     setting = view.settings().get(name)
-    if not setting:
+    if not setting and mandatory:
         raise ExecutionError('Cannot find setting {0}'.format(name))
     return setting
 
