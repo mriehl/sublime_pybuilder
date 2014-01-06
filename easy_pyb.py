@@ -115,13 +115,10 @@ def run_pybuilder_and_catch_errors(pyb_args):
 
 
 def run_pybuilder(pyb_args):
+    project_root = get_project_root()
+
     window = sublime.active_window()
     view = window.active_view()
-
-    project_root = view.settings().get('project_root')
-    if not project_root:
-        raise ExecutionError('No configured project_root')
-
     pyb_script = determine_pyb_executable_command(view)
     pyb_script.extend(pyb_args)
 
@@ -218,6 +215,14 @@ def plugin_unloaded():
 
 
 def pyb_init():
+    project_root = get_project_root()
+
+    scratch('Pyb init started...', new_panel=True, newline=True)
+
+    defer_with_progress(['pyb-init local'], cwd=project_root, shell=True)
+
+
+def get_project_root():
     window = sublime.active_window()
     view = window.active_view()
 
@@ -225,9 +230,7 @@ def pyb_init():
     if not project_root:
         raise ExecutionError('No configured project_root')
 
-    scratch('Pyb init started...', new_panel=True, newline=True)
-
-    defer_with_progress(['pyb-init local'], cwd=project_root, shell=True)
+    return project_root
 
 
 class ThreadProgress():
