@@ -159,8 +159,12 @@ def defer_with_progress(args, cwd=None, shell=False):
 
 
 def spawn_command_with_realtime_output(args, cwd, shell):
+    venv_bin_dir = os.path.dirname(get_setting('python_interpreter'))
+    env = os.environ
+    env['PATH'] += ':%s' % venv_bin_dir
     child = subprocess.Popen(
-        args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=shell)
+        args, cwd=cwd, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, shell=shell, env=os.environ)
     flag_fd_as_async(child.stdout)
     flag_fd_as_async(child.stderr)
 
