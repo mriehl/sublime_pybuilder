@@ -29,7 +29,7 @@ You can use them to :
 * Verify your project
 * Run [pyb-init](https://github.com/mriehl/pyb_init) on your project
 
-## Configuration
+## Mandatory configuration
 sublime_pybuilder expects two project settings to be present:
 
 * `python_interpreter`
@@ -83,6 +83,10 @@ My settings are:
     }
 }
 ```
+
+## Optional configuration
+* `sublime_pybuilder_output_panel_color_scheme` can be set to a color scheme you like (the default is `"Packages/Color Scheme - Default/Monokai.tmTheme"`).
+It will be used for the output panel.
 
 ## License
 [MIT](https://github.com/mriehl/sublime_pybuilder/blob/master/LICENSE)

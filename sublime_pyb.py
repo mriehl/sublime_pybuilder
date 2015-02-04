@@ -202,6 +202,9 @@ def scratch(text, new_panel=False, newline=False):
     if new_panel:
         window = sublime.active_window()
         panel = window.get_output_panel("sublime_pybuilder")
+        configured_color_scheme = get_setting("sublime_pybuilder_output_panel_color_scheme", mandatory=False)
+        color_scheme = configured_color_scheme or "Packages/Color Scheme - Default/Monokai.tmTheme"
+        panel.settings().set("color_scheme", color_scheme)
     if newline:
         text += '\n'
     sublime.active_window().run_command('scratch_text', {'text': text})
