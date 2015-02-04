@@ -33,6 +33,7 @@ import sublime_plugin
 
 global panel  # ugly - but view.get_output_panel recreates the output panel
               # each time it is called, which sucks
+
 panel = None
 
 
@@ -109,6 +110,7 @@ class PybInit(sublime_plugin.ApplicationCommand):
 
 
 class ScratchText(sublime_plugin.TextCommand):
+
     """
     Helper command to deploy text to the sublime_pybuilder output panel.
     Also gives focus to the panel if it's not focused yet.
@@ -126,10 +128,10 @@ class ScratchText(sublime_plugin.TextCommand):
 
 
 def run_pybuilder_and_catch_errors(pyb_args):
-        try:
-            run_pybuilder(pyb_args)
-        except ExecutionError as error:
-            sublime.error_message(str(error))
+    try:
+        run_pybuilder(pyb_args)
+    except ExecutionError as error:
+        sublime.error_message(str(error))
 
 
 def run_pybuilder(pyb_args):
@@ -285,7 +287,7 @@ class ThreadProgress():
         after = (self.size - 1) - before
 
         sublime.status_message('%s [%s=%s]' %
-                              (self.message, ' ' * before, ' ' * after))
+                               (self.message, ' ' * before, ' ' * after))
 
         if not after:
             self.addend = -1
