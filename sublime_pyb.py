@@ -110,7 +110,7 @@ class ScratchText(sublime_plugin.TextCommand):
         panel.show(panel.size())
         panel_active = panel.id() == window.active_view().id()
         if not panel_active:
-            window.run_command("show_panel", {"panel": "output.easypyb"})
+            window.run_command("show_panel", {"panel": "output.sublime_pybuilder"})
 
 
 def run_pybuilder_and_catch_errors(pyb_args):
