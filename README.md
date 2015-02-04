@@ -3,7 +3,7 @@ sublime_pybuilder
 
 Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 
-![sublime_pybuilder provides PyBuilder integration for Sublime Text 3](pyb.gif)
+![sublime_pybuilder provides PyBuilder integration for Sublime Text 3](sublime_pybuilder.gif)
 
 ## Features
 * Real-time output
