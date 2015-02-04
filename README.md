@@ -39,7 +39,7 @@ sublime_pybuilder expects two project settings to be present:
 
 Here's what your project settings might look like :
 
-```
+```json
 {
     "folders":
     [
@@ -64,7 +64,7 @@ Thus we need to specify the path to the bootstrapping script additionally.
 
 My settings are:
 
-```
+```json
 {
     "folders":
     [
