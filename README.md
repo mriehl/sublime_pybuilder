@@ -1,9 +1,9 @@
-EasyPyb
+sublime_pybuilder
 =======
 
 Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 
-![EasyPyb provides PyBuilder integration for Sublime Text 3](easypyb.gif)
+![sublime_pybuilder provides PyBuilder integration for Sublime Text 3](pyb.gif)
 
 ## Features
 * Real-time output
@@ -13,6 +13,8 @@ Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 
 ## Installation
 Clone it in your sublime text `Packages/` directory.
+
+**Package control installation coming soon!**
 
 ## Usage
 Several commands will be made available to you through the command palette.
@@ -28,7 +30,7 @@ You can use them to :
 * Run [pyb-init](https://github.com/mriehl/pyb_init) on your project
 
 ## Configuration
-EasyPyb expects two project settings to be present:
+sublime_pybuilder expects two project settings to be present:
 
 * `python_interpreter`
   This is the path to your python interpreter. Could be your system python or a virtualenv.
@@ -49,7 +51,8 @@ Here's what your project settings might look like :
     "settings":
     {
         "python_interpreter": "/home/mriehl/workspace/yadtshell/venv/bin/python",
-        "project_root": "/home/mriehl/workspace/yadtshell"
+        "project_root": "/home/mriehl/workspace/yadtshell", # sublime_pybuilder specific
+        "extra_paths": ["home/mriehl/workspace/yadtshell/src/main/python"] # anaconda specific
     }
 }
 ```
@@ -80,4 +83,4 @@ My settings are:
 ```
 
 ## License
-[MIT](https://github.com/mriehl/EasyPyb/blob/master/LICENSE)
+[MIT](https://github.com/mriehl/sublime_pybuilder/blob/master/LICENSE)

@@ -48,49 +48,49 @@ An error has occurred while trying to run PyBuilder!
 '''.format(message)
 
 
-class EasyPybRun(sublime_plugin.ApplicationCommand):
+class PybRun(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors([])
 
 
-class EasyPybClean(sublime_plugin.ApplicationCommand):
+class PybClean(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors(['clean'])
 
 
-class EasyPybRunUnitTests(sublime_plugin.ApplicationCommand):
+class PybRunUnitTests(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors(['run_unit_tests'])
 
 
-class EasyPybRunIntegrationTests(sublime_plugin.ApplicationCommand):
+class PybRunIntegrationTests(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors(['run_integration_tests'])
 
 
-class EasyPybAnalyze(sublime_plugin.ApplicationCommand):
+class PybAnalyze(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors(['analyze'])
 
 
-class EasyPybVerify(sublime_plugin.ApplicationCommand):
+class PybVerify(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors(['verify'])
 
 
-class EasyPybPublish(sublime_plugin.ApplicationCommand):
+class PybPublish(sublime_plugin.ApplicationCommand):
 
     def run(self):
         run_pybuilder_and_catch_errors(['publish'])
 
 
-class EasyPybInit(sublime_plugin.ApplicationCommand):
+class PybInit(sublime_plugin.ApplicationCommand):
 
     def run(self):
         pyb_init()
@@ -98,7 +98,7 @@ class EasyPybInit(sublime_plugin.ApplicationCommand):
 
 class ScratchText(sublime_plugin.TextCommand):
     """
-    Helper command to deploy text to the easypyb output panel.
+    Helper command to deploy text to the sublime_pybuilder output panel.
     Also gives focus to the panel if it's not focused yet.
     The panel needs to be a global because get_output_panel'ing it recreates
     it and discards the existing text.
@@ -155,7 +155,7 @@ def defer_with_progress(args, cwd=None, shell=False):
     thread = threading.Thread(
         target=spawn_command_with_realtime_output, args=(args, cwd, shell))
     thread.start()
-    ThreadProgress(thread, 'EasyPyb running', 'EasyPyb finished!')
+    ThreadProgress(thread, 'PyBuilder running', 'PyBuilder finished!')
 
 
 def spawn_command_with_realtime_output(args, cwd, shell):
@@ -189,7 +189,7 @@ def scratch(text, new_panel=False, newline=False):
     global panel
     if new_panel:
         window = sublime.active_window()
-        panel = window.get_output_panel("easypyb")
+        panel = window.get_output_panel("sublime_pybuilder")
     if newline:
         text += '\n'
     sublime.active_window().run_command('scratch_text', {'text': text})
@@ -211,7 +211,7 @@ def read_async(fd):
 
 def plugin_loaded():
     if sys.version_info < (3, 3):
-        error = 'EasyPyb is only compatible with Sublime Text 3'
+        error = 'sublime_pybuilder is only compatible with Sublime Text 3'
         sublime.error_message(error)
         raise RuntimeError(error)
 

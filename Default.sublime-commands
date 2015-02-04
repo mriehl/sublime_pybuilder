@@ -1,35 +1,35 @@
 [
     {
-        "caption": "EasyPyb: Run PyBuilder",
-        "command": "easy_pyb_run"
+        "caption": "PyBuilder: Run PyBuilder",
+        "command": "pyb_run"
     },
     {
-        "caption": "EasyPyb: Clean",
-        "command": "easy_pyb_clean"
+        "caption": "PyBuilder: Clean",
+        "command": "pyb_clean"
     },
     {
-        "caption": "EasyPyb: Run unit tests",
-        "command": "easy_pyb_run_unit_tests"
+        "caption": "PyBuilder: Run unit tests",
+        "command": "pyb_run_unit_tests"
     },
     {
-        "caption": "EasyPyb: Run integration tests",
-        "command": "easy_pyb_run_integration_tests"
+        "caption": "PyBuilder: Run integration tests",
+        "command": "pyb_run_integration_tests"
     },
     {
-        "caption": "EasyPyb: Analyze",
-        "command": "easy_pyb_analyze"
+        "caption": "PyBuilder: Analyze",
+        "command": "pyb_analyze"
     },
     {
-        "caption": "EasyPyb: Verify",
-        "command": "easy_pyb_verify"
+        "caption": "PyBuilder: Verify",
+        "command": "pyb_verify"
     },
     {
-        "caption": "EasyPyb: Publish",
-        "command": "easy_pyb_publish"
+        "caption": "PyBuilder: Publish",
+        "command": "pyb_publish"
     },
     {
-        "caption": "EasyPyb: Pyb init",
-        "command": "easy_pyb_init"
+        "caption": "PyBuilder: Pyb init",
+        "command": "pyb_init"
     },
     {
         "caption": "scratch_text",
