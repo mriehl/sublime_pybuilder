@@ -51,16 +51,18 @@ Here's what your project settings might look like :
     "settings":
     {
         "python_interpreter": "/home/mriehl/workspace/yadtshell/venv/bin/python",
-        "project_root": "/home/mriehl/workspace/yadtshell", # sublime_pybuilder specific
-        "extra_paths": ["home/mriehl/workspace/yadtshell/src/main/python"] # anaconda specific
+        "project_root": "/home/mriehl/workspace/yadtshell",
+        "extra_paths": ["home/mriehl/workspace/yadtshell/src/main/python"]
     }
 }
 ```
 
+I'm using [Anaconda](https://github.com/DamnWidget/Anaconda) so I added the project sources with the `extra_paths` setting so that autocompletion and goto definition work. It is not necessary for sublime_pybuilder to work.
+
 ### Special case - only if you want to work on the PyBuilder project itself!
 In order to build pybuilder, you need to run a bootstrapping script.
 This script must be run with the right python interpreter in order to see your packages.
-Thus we need to specify the path to the bootstrapping script additionally.
+Thus we need to specify the path to the bootstrapping script additionally with the setting `pyb_path`.
 
 My settings are:
 
