@@ -255,7 +255,7 @@ def get_setting(name, mandatory=True):
         raise ExecutionError(dedent('''
                              Cannot find project setting {0}.
                              Please check the documentation for more information:
-                             \thttps://github.com/mriehl/sublime_pybuilder/README.md'''.format(name)))
+                             \thttps://github.com/mriehl/sublime_pybuilder/blob/master/README.md'''.format(name)))
     return setting
 
 
