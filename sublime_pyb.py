@@ -48,6 +48,18 @@ An error has occurred while trying to run PyBuilder!
 '''.format(message)
 
 
+class PybShowPanel(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        if not panel:
+            sublime.error_message("Cannot show output panel, there's no output to show!")
+        else:
+            window = sublime.active_window()
+            panel_active = panel.id() == window.active_view().id()
+            if not panel_active:
+                window.run_command("show_panel", {"panel": "output.sublime_pybuilder"})
+
+
 class PybRun(sublime_plugin.ApplicationCommand):
 
     def run(self):

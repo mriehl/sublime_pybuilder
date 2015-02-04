@@ -37,5 +37,9 @@
         "args": {
             "text": ""
         }
+    },
+    {
+        "caption": "PyBuilder: Show output panel",
+        "command": "pyb_show_panel"
     }
 ]
