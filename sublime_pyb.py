@@ -27,6 +27,7 @@ import threading
 import fcntl
 import errno
 import select
+from textwrap import dedent
 
 import sublime
 import sublime_plugin
@@ -251,7 +252,10 @@ def get_setting(name, mandatory=True):
 
     setting = view.settings().get(name)
     if not setting and mandatory:
-        raise ExecutionError('Cannot find setting {0}'.format(name))
+        raise ExecutionError(dedent('''
+                             Cannot find project setting {0}.
+                             Please check the documentation for more information:
+                             \thttps://github.com/mriehl/sublime_pybuilder/README.md'''.format(name)))
     return setting
 
 
