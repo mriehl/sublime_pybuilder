@@ -12,9 +12,7 @@ Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 * [pyb-init](https://github.com/mriehl/pyb_init) support built-in
 
 ## Installation
-Clone it in your sublime text `Packages/` directory.
-
-**Package control installation coming soon!**
+[Install it with package control](https://packagecontrol.io/packages/PyBuilder).
 
 ## Usage
 Several commands will be made available to you through the command palette.
