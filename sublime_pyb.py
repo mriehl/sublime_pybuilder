@@ -33,8 +33,6 @@ from time import sleep
 import sublime
 import sublime_plugin
 
-ON_POSIX = 'posix' in sys.builtin_module_names
-
 global panel  # ugly - but view.get_output_panel recreates the output panel
               # each time it is called, which sucks
 
@@ -179,10 +177,11 @@ def defer_with_progress(args, cwd=None, shell=False):
 def spawn_command_with_realtime_output(args, cwd, shell):
     venv_bin_dir = os.path.dirname(get_setting('python_interpreter'))
     env = os.environ
-    env['PATH'] += ':%s' % venv_bin_dir
+    if "win32" not in sys.platform:
+        env['PATH'] += ':%s' % venv_bin_dir
     child = subprocess.Popen(
         args, cwd=cwd, stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE, shell=shell, env=os.environ, close_fds=ON_POSIX)
+        stderr=subprocess.PIPE, shell=shell, env=os.environ)
 
     collect_output = CollectOutput()
     output_queue = collect_output.from_fd(child.stdout).into_new_queue()
