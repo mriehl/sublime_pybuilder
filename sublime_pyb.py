@@ -29,14 +29,21 @@ import select
 from textwrap import dedent
 from queue import Queue, Empty
 from time import sleep
+from re import compile
 
 import sublime
 import sublime_plugin
 
+
+NEWLINE_REGEX = compile(r'(\r\n|\r|\r)')
+
 global panel  # ugly - but view.get_output_panel recreates the output panel
               # each time it is called, which sucks
-
 panel = None
+
+
+def normalize_newlines(string):
+    return NEWLINE_REGEX.sub('\n', string)
 
 
 class ExecutionError(BaseException):
@@ -190,7 +197,7 @@ def spawn_command_with_realtime_output(args, cwd, shell):
     while True:
         try:
             line = output_queue.get_nowait()
-            scratch(line.decode('utf-8'))
+            scratch(normalize_newlines(line.decode('utf-8')))
         except Empty:
             if child.poll() is not None:
                 return
