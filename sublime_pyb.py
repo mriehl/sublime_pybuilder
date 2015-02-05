@@ -27,9 +27,13 @@ import threading
 import errno
 import select
 from textwrap import dedent
+from queue import Queue, Empty
+from time import sleep
 
 import sublime
 import sublime_plugin
+
+ON_POSIX = 'posix' in sys.builtin_module_names
 
 global panel  # ugly - but view.get_output_panel recreates the output panel
               # each time it is called, which sucks
@@ -178,25 +182,50 @@ def spawn_command_with_realtime_output(args, cwd, shell):
     env['PATH'] += ':%s' % venv_bin_dir
     child = subprocess.Popen(
         args, cwd=cwd, stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE, shell=shell, env=os.environ)
-    flag_fd_as_async(child.stdout)
-    flag_fd_as_async(child.stderr)
+        stderr=subprocess.PIPE, shell=shell, env=os.environ, close_fds=ON_POSIX)
+
+    collect_output = CollectOutput()
+    output_queue = collect_output.from_fd(child.stdout).into_new_queue()
+    collect_output.from_fd(child.stderr).into_queue()
 
     while True:
-        select.select([child.stdout, child.stderr], [], [])
+        try:
+            line = output_queue.get_nowait()
+            scratch(line.decode('utf-8'))
+        except Empty:
+            if child.poll() is not None:
+                return
 
-        stdout = read_async(child.stdout)
-        stderr = read_async(child.stderr)
+        sleep(.05)
 
-        if stdout:
-            scratch(stdout.decode('utf-8'))
-        if stderr:
-            scratch(stderr.decode('utf-8'))
 
-        finished = child.poll() is not None
+class CollectOutput(object):
 
-        if finished:
-            return
+    def __init__(self):
+        pass
+
+    def from_fd(self, fd):
+        self.fd = fd
+        return self
+
+    def into_queue(self):
+        return self._collect_into_own_queue()
+
+    def into_new_queue(self):
+        self.queue = Queue()
+        return self._collect_into_own_queue()
+
+    def _collect_into_own_queue(self):
+        collector = threading.Thread(target=_enqueue_output, args=(self.fd, self.queue))
+        collector.daemon = True
+        collector.start()
+        return self.queue
+
+
+def _enqueue_output(fd, queue):
+    for line in iter(fd.readline, b''):
+        queue.put(line)
+    fd.close()
 
 
 def scratch(text, new_panel=False, newline=False):
@@ -210,26 +239,6 @@ def scratch(text, new_panel=False, newline=False):
     if newline:
         text += '\n'
     sublime.active_window().run_command('scratch_text', {'text': text})
-
-
-def flag_fd_as_async(fd):
-    if "win32" in sys.platform:
-        return
-    import fcntl
-
-    # TODO @mriehl does not work on windows
-
-    fcntl.fcntl(fd, fcntl.F_SETFL, fcntl.fcntl(
-        fd, fcntl.F_GETFL) | os.O_NONBLOCK)
-
-
-def read_async(fd):
-    try:
-        return fd.read()
-    except IOError as e:
-        if e.errno == errno.EAGAIN:
-            return ''
-        raise e
 
 
 def plugin_loaded():
