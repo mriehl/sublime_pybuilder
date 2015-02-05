@@ -24,7 +24,6 @@ import os
 import subprocess
 import sys
 import threading
-import fcntl
 import errno
 import select
 from textwrap import dedent
@@ -214,9 +213,11 @@ def scratch(text, new_panel=False, newline=False):
 
 
 def flag_fd_as_async(fd):
-    # TODO @mriehl does not work on windows
     if "win32" in sys.platform:
         return
+    import fcntl
+
+    # TODO @mriehl does not work on windows
 
     fcntl.fcntl(fd, fcntl.F_SETFL, fcntl.fcntl(
         fd, fcntl.F_GETFL) | os.O_NONBLOCK)
