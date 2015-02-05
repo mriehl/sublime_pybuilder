@@ -166,7 +166,7 @@ def infer_pyb_executable_command_from_interpreter(interpreter):
             pyb_script)
         raise ExecutionError(error_message)
 
-    return [pyb_script]
+    return [interpreter, pyb_script]
 
 
 def defer_with_progress(args, cwd=None, shell=False):
