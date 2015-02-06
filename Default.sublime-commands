@@ -4,6 +4,10 @@
         "command": "pyb_run"
     },
     {
+        "caption": "PyBuilder: Custom run",
+        "command": "pyb_custom"
+    },
+    {
         "caption": "PyBuilder: Clean",
         "command": "pyb_clean"
     },

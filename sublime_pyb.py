@@ -95,6 +95,16 @@ class PybClean(sublime_plugin.ApplicationCommand):
         run_pybuilder_and_catch_errors(['clean'])
 
 
+class PybCustom(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        def custom_run(user_input):
+            options_or_tasks = user_input.split(" ")
+            run_pybuilder_and_catch_errors(options_or_tasks)
+
+        sublime.active_window().show_input_panel("PyBuilder options or tasks", "", custom_run, None, None)
+
+
 class PybRunUnitTests(sublime_plugin.ApplicationCommand):
 
     def run(self):
