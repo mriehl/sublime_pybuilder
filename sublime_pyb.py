@@ -75,6 +75,17 @@ class PybRun(sublime_plugin.ApplicationCommand):
     def run(self):
         run_pybuilder_and_catch_errors([])
 
+class PybShowCoverage(sublime_plugin.ApplicationCommand):
+
+    def run(self):
+        def show_coverage():
+            path_to_coverage_file = os.path.join(get_project_root(), "target", "reports", "coverage")
+            if not os.path.isfile(path_to_coverage_file):
+                sublime.error_message("Cannot find coverage file {0}. Are you using the plugin python.coverage?".format(path_to_coverage_file))
+            else:
+                sublime.active_window().open_file(path_to_coverage_file)
+
+        run_pybuilder_and_catch_errors(["analyze"], callback=show_coverage)
 
 class PybClean(sublime_plugin.ApplicationCommand):
 
@@ -136,14 +147,14 @@ class ScratchText(sublime_plugin.TextCommand):
             window.run_command("show_panel", {"panel": "output.sublime_pybuilder"})
 
 
-def run_pybuilder_and_catch_errors(pyb_args):
+def run_pybuilder_and_catch_errors(pyb_args, callback=None):
     try:
-        run_pybuilder(pyb_args)
+        run_pybuilder(pyb_args, callback)
     except ExecutionError as error:
         sublime.error_message(str(error))
 
 
-def run_pybuilder(pyb_args):
+def run_pybuilder(pyb_args, callback):
     project_root = get_project_root()
 
     pyb_script = determine_pyb_executable_command()
@@ -151,7 +162,7 @@ def run_pybuilder(pyb_args):
 
     scratch('Build started...', new_panel=True, newline=True)
 
-    defer_with_progress(pyb_script, cwd=project_root)
+    defer_with_progress(pyb_script, cwd=project_root, callback=callback)
 
 
 def determine_pyb_executable_command():
@@ -174,14 +185,14 @@ def infer_pyb_executable_command_from_interpreter(interpreter):
     return [interpreter, pyb_script]
 
 
-def defer_with_progress(args, cwd=None, shell=False):
+def defer_with_progress(args, cwd=None, shell=False, callback=None):
     thread = threading.Thread(
-        target=spawn_command_with_realtime_output, args=(args, cwd, shell))
+        target=spawn_command_with_realtime_output, args=(args, cwd, shell, callback))
     thread.start()
     ThreadProgress(thread, 'PyBuilder running', 'PyBuilder finished!')
 
 
-def spawn_command_with_realtime_output(args, cwd, shell):
+def spawn_command_with_realtime_output(args, cwd, shell, callback):
     venv_bin_dir = os.path.dirname(get_setting('python_interpreter'))
     env = os.environ
     if "win32" not in sys.platform:
@@ -200,6 +211,8 @@ def spawn_command_with_realtime_output(args, cwd, shell):
             scratch(normalize_newlines(line.decode('utf-8')))
         except Empty:
             if child.poll() is not None:
+                if callback:
+                    callback()
                 return
 
         sleep(.05)

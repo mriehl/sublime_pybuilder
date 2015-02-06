@@ -32,6 +32,10 @@
         "command": "pyb_init"
     },
     {
+        "caption": "PyBuilder: Report coverage",
+        "command": "pyb_show_coverage"
+    },
+    {
         "caption": "scratch_text",
         "command": "scratch_text",
         "args": {
