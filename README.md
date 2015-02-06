@@ -6,7 +6,7 @@ Sublime text 3 plugin for [PyBuilder](http://pybuilder.github.io).
 ![sublime_pybuilder provides PyBuilder integration for Sublime Text 3](https://raw.githubusercontent.com/pybuilder/pybuilder.github.io/master/img/sublime_pybuilder.gif)
 
 ## Features
-* Real-time output (not on windows currently :-( )
+* Real-time output
 * Minimal configuration if you use Anaconda or SublimePythonIDE as it reuses the settings
 * Does not block so you can work or check out what to do next while building.
 * [pyb-init](https://github.com/mriehl/pyb_init) support built-in
