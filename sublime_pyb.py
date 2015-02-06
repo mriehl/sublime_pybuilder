@@ -75,6 +75,7 @@ class PybRun(sublime_plugin.ApplicationCommand):
     def run(self):
         run_pybuilder_and_catch_errors([])
 
+
 class PybShowCoverage(sublime_plugin.ApplicationCommand):
 
     def run(self):
@@ -85,7 +86,8 @@ class PybShowCoverage(sublime_plugin.ApplicationCommand):
             else:
                 sublime.active_window().open_file(path_to_coverage_file)
 
-        run_pybuilder_and_catch_errors(["analyze"], callback=show_coverage)
+        run_pybuilder_and_catch_errors(["analyze"], callback=show_coverage, silent=True)
+
 
 class PybClean(sublime_plugin.ApplicationCommand):
 
@@ -147,22 +149,23 @@ class ScratchText(sublime_plugin.TextCommand):
             window.run_command("show_panel", {"panel": "output.sublime_pybuilder"})
 
 
-def run_pybuilder_and_catch_errors(pyb_args, callback=None):
+def run_pybuilder_and_catch_errors(pyb_args, callback=None, silent=False):
     try:
-        run_pybuilder(pyb_args, callback)
+        run_pybuilder(pyb_args, callback, silent)
     except ExecutionError as error:
         sublime.error_message(str(error))
 
 
-def run_pybuilder(pyb_args, callback):
+def run_pybuilder(pyb_args, callback, silent):
     project_root = get_project_root()
 
     pyb_script = determine_pyb_executable_command()
     pyb_script.extend(pyb_args)
 
-    scratch('Build started...', new_panel=True, newline=True)
+    if not silent:
+        scratch('Build started...', new_panel=True, newline=True)
 
-    defer_with_progress(pyb_script, cwd=project_root, callback=callback)
+    defer_with_progress(pyb_script, cwd=project_root, callback=callback, silent=silent)
 
 
 def determine_pyb_executable_command():
@@ -185,14 +188,14 @@ def infer_pyb_executable_command_from_interpreter(interpreter):
     return [interpreter, pyb_script]
 
 
-def defer_with_progress(args, cwd=None, shell=False, callback=None):
+def defer_with_progress(args, cwd=None, shell=False, callback=None, silent=False):
     thread = threading.Thread(
-        target=spawn_command_with_realtime_output, args=(args, cwd, shell, callback))
+        target=spawn_command_with_realtime_output, args=(args, cwd, shell, callback, silent))
     thread.start()
     ThreadProgress(thread, 'PyBuilder running', 'PyBuilder finished!')
 
 
-def spawn_command_with_realtime_output(args, cwd, shell, callback):
+def spawn_command_with_realtime_output(args, cwd, shell, callback, silent):
     venv_bin_dir = os.path.dirname(get_setting('python_interpreter'))
     env = os.environ
     if "win32" not in sys.platform:
@@ -208,7 +211,8 @@ def spawn_command_with_realtime_output(args, cwd, shell, callback):
     while True:
         try:
             line = output_queue.get_nowait()
-            scratch(normalize_newlines(line.decode('utf-8')))
+            if not silent:
+                scratch(normalize_newlines(line.decode('utf-8')))
         except Empty:
             if child.poll() is not None:
                 if callback:
