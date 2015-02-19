@@ -31,6 +31,7 @@ from queue import Queue, Empty
 from time import sleep
 from re import compile
 
+
 import sublime
 import sublime_plugin
 
@@ -78,13 +79,50 @@ class PybRun(sublime_plugin.ApplicationCommand):
 
 class PybShowCoverage(sublime_plugin.ApplicationCommand):
 
+    def show_coverage_file(self):
+        sublime.active_window().open_file(self.path_to_coverage_file)
+
+    def determine_color_from_coverage_percent(self, coverage_percent):
+        if coverage_percent >= 60:
+            return "green"
+        if coverage_percent >= 25:
+            return "yellow"
+        return "red"
+
+    def render_html_from_coverage_lines(self, coverage_lines):
+        total_coverage_line = coverage_lines[-1]
+        total_coverage = total_coverage_line.split()[-1]
+        coverage_percent = int(total_coverage.replace("%", ""))
+        coverage_color = self.determine_color_from_coverage_percent(coverage_percent)
+        colored_total_coverage = '<span style="color:{color}">{total_coverage}</span>'.format(color=coverage_color,
+                                                                                              total_coverage=total_coverage)
+        html_coverage = '<h1>Overall coverage: {total_coverage}</h1><p>Full report <a href="full-report">here</a></p>\n'.format(
+            total_coverage=colored_total_coverage)
+
+        return html_coverage
+
+    def show_coverage_tooltip(self):
+        def show_full_report(link_ref):
+            if link_ref == "full-report":
+                self.show_coverage_file()
+
+        with open(self.path_to_coverage_file, "r") as coverage_file:
+            coverage_lines = coverage_file.readlines()
+            popup_text = self.render_html_from_coverage_lines(coverage_lines)
+            sublime.active_window().active_view().show_popup(popup_text, max_width=400, on_navigate=show_full_report)
+
     def run(self):
         def show_coverage():
-            path_to_coverage_file = os.path.join(get_project_root(), "target", "reports", "coverage")
-            if not os.path.isfile(path_to_coverage_file):
-                sublime.error_message("Cannot find coverage file {0}. Are you using the plugin python.coverage?".format(path_to_coverage_file))
+            self.path_to_coverage_file = os.path.join(get_project_root(), "target", "reports", "coverage")
+            if not os.path.isfile(self.path_to_coverage_file):
+                sublime.error_message("Cannot find coverage file {0}. Are you using the plugin python.coverage?".format(self.path_to_coverage_file))
+                return
+
+            sublime_version_supports_popups = hasattr(sublime.active_window().active_view(), "show_popup")
+            if sublime_version_supports_popups and not get_setting("pyb_no_popup", mandatory=False):
+                self.show_coverage_tooltip()
             else:
-                sublime.active_window().open_file(path_to_coverage_file)
+                self.show_coverage_file()
 
         run_pybuilder_and_catch_errors(["analyze"], callback=show_coverage, silent=True)
 
