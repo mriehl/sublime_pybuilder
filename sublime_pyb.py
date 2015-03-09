@@ -219,6 +219,9 @@ def run_pybuilder(pyb_args, callback, silent):
 def determine_pyb_executable_command():
     interpreter = get_setting('python_interpreter')
 
+    if "win32" in sys.platform:
+        interpreter = "pythonw".join(interpreter.rsplit("python", 1))
+
     pyb_path = get_setting('pyb_path', mandatory=False)
     if pyb_path:
         return [interpreter, pyb_path]
